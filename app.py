@@ -26,8 +26,10 @@ def predict(text):
 # Example list
 examples = [
     "Government introduces a game-changing policy for economic growth.",
-    "Opposition lashes out over alleged corruption scandal.",
-    "The city council held a meeting to discuss waste management policies."
+    "Opposition slams ruling party over controversial education bill.",
+    "New environmental law hailed as a breakthrough by activists.",
+    "Experts warn of rising inflation despite central bank's optimism.",
+    "Healthcare reforms criticized for favoring private corporations."
 ]
 
 # ---------- STREAMLIT APP ----------
@@ -35,32 +37,33 @@ st.set_page_config(page_title="News Bias Detector", page_icon="📰")
 st.title("📰 News Bias Detector")
 st.markdown("Built using Machine Learning and NLP to detect bias in news headlines or short texts.")
 
-# Text Input
+# ---------- Get or initialize index ----------
+example_index = st.session_state.get('example_index', 0)
+
+# ---------- Text Input with current example loaded ----------
 user_input = st.text_area(
     "**Enter your news text:**",
-    placeholder=examples[0],
+    value=examples[example_index],
     height=200
 )
 
-# Define 3-column layout: left, spacer, right
+# ---------- Define 3-column layout: left, spacer, right ----------
 col1, col_spacer, col3 = st.columns([1, 4, 1])
 
-# Left: Show Example
+# ---------- Left: Show Example ----------
 with col1:
     if st.button("🔁 Show an example"):
-        st.session_state['example_index'] = (st.session_state.get('example_index', 0) + 1) % len(examples)
+        st.session_state['example_index'] = (example_index + 1) % len(examples)
         st.rerun()
 
-
-# Right: Detect Bias
+# ---------- Right: Detect Bias ----------
 with col3:
-    if st.button("Detect Bias"):
+    if st.button("🔍 Detect Bias"):
         if not user_input.strip():
             st.warning("Please enter or upload a news text.")
         else:
             pred, confidence = predict(user_input)
             st.success(f"**Prediction:** {pred}  \n**Confidence:** {confidence}%")
-
 
 # File upload option
 st.markdown("### 📁 Or upload a file:")
