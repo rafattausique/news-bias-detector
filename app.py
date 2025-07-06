@@ -65,14 +65,23 @@ with col3:
             pred, confidence = predict(user_input)
             st.markdown(
     f"""
-    <div style='background-color: #014421; padding: 1rem; border-radius: 10px; color: white; width: fit-content;'>
-        <b>Prediction:</b> {pred}<br>
-        <b>Confidence:</b> {confidence}%
+    <div style='
+        background-color: #014421;
+        padding: 1rem;
+        border-radius: 10px;
+        color: white;
+        width: fit-content;
+        font-weight: bold;
+        line-height: 1.6;
+    '>
+        Prediction: {pred}<br>
+        Confidence: {confidence}%
     </div>
     """,
     unsafe_allow_html=True
 )
 
+            
 
 
 # File upload option
