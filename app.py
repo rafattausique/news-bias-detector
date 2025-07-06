@@ -1,58 +1,43 @@
-
 import streamlit as st
-import os
 import joblib
 import pandas as pd
 from textblob import TextBlob
 import re
-import string
 
 # Load model and vectorizer
 model = joblib.load("bias_classifier_model.pkl")
 vectorizer = joblib.load("tfidf_vectorizer.pkl")
 
-# Text cleaning function
-def clean_text(text):
-    text = text.lower()
-    text = re.sub(f"[{re.escape(string.punctuation)}]", "", text)
-    text = re.sub(r"\s+", " ", text).strip()
-    return text
-
-# Bias label decoder
-label_map = {
-    "left": "🟥 Left-Leaning Bias",
-    "center": "🟨 Neutral / Center",
-    "right": "🟦 Right-Leaning Bias"
-}
-
-# App interface
+# Page config
 st.set_page_config(page_title="News Bias Detector", layout="centered")
-st.title("📰 Indian News Media Bias Detector")
-st.markdown("Paste a news article or snippet to detect its **media bias**.")
 
-# Input
-user_input = st.text_area("Enter News Article", height=200)
+# Title and subtitle
+st.title("📰 News Bias Detector")
+st.caption("Built using Machine Learning and NLP to detect bias in news headlines or short texts.")
 
-if st.button("Analyze"):
-    if user_input.strip() == "":
-        st.warning("Please enter some text.")
-    else:
-        # Clean & vectorize
-        clean = clean_text(user_input)
-        vect = vectorizer.transform([clean])
+# Input area
+st.markdown("### Enter your news text:")
+input_text = st.text_area("", placeholder="e.g., Government introduces a game-changing policy for economic growth.", height=150)
 
-        # Predict
-        prediction = model.predict(vect)[0]
+# Example button
+if st.button("Show an example"):
+    input_text = "The new law is a blatant attack on our freedom and democracy."
 
-        # Sentiment
-        sentiment = TextBlob(user_input).sentiment
+# Prediction
+if st.button("Detect Bias"):
+    if input_text.strip():
+        # Clean input
+        cleaned_text = re.sub(r'[^\w\s]', '', input_text.lower())
 
-        # Display results
-        st.subheader("🧠 Prediction")
-        st.success(f"**Bias Detected:** {label_map.get(prediction, prediction)}")
-        
-        st.subheader("💬 Sentiment")
-        st.info(f"**Polarity:** {sentiment.polarity:.2f} | **Subjectivity:** {sentiment.subjectivity:.2f}")
+        # Vectorize and predict
+        vectorized = vectorizer.transform([cleaned_text])
+        prediction = model.predict(vectorized)[0]
+        confidence = model.predict_proba(vectorized).max() * 100
 
+        # Display result
         st.markdown("---")
-        st.caption("Built with ❤️ using Streamlit, scikit-learn, and TextBlob")
+        st.success(f"**Prediction:** {'🟥 Biased' if prediction == 1 else '🟩 Unbiased'}")
+        st.info(f"**Confidence:** {confidence:.2f}%")
+    else:
+        st.warning("Please enter some text to analyze.")
+
