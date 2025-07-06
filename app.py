@@ -63,7 +63,16 @@ with col3:
             st.warning("Please enter or upload a news text.")
         else:
             pred, confidence = predict(user_input)
-            st.success(f"**Prediction:** {pred}  \n\n**Confidence:** {confidence}%")
+            st.markdown(
+    f"""
+    <div style='background-color: #014421; padding: 1rem; border-radius: 10px; color: white; width: fit-content;'>
+        <b>Prediction:</b> {pred}<br>
+        <b>Confidence:</b> {confidence}%
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 
 
 # File upload option
