@@ -1,5 +1,7 @@
 
 import streamlit as st
+import os
+os.system("pip install joblib")
 import joblib
 import pandas as pd
 from textblob import TextBlob
