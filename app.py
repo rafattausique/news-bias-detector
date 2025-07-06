@@ -47,13 +47,13 @@ col1, col_spacer, col3 = st.columns([1, 4, 1])
 
 # Left: Show Example
 with col1:
-    if st.button("🔁 Show an example"):
+    if st.button("Show an example"):
         st.session_state['example_index'] = (st.session_state.get('example_index', 0) + 1) % len(examples)
         st.experimental_rerun()
 
 # Right: Detect Bias
 with col3:
-    if st.button("✅ Detect Bias"):
+    if st.button("Detect Bias"):
         if not user_input.strip():
             st.warning("Please enter or upload a news text.")
         else:
