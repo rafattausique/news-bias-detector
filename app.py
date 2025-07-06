@@ -36,22 +36,30 @@ st.title("📰 News Bias Detector")
 st.markdown("Built using Machine Learning and NLP to detect bias in news headlines or short texts.")
 
 # Text Input
-user_input = st.text_area("**Enter your news text:**", placeholder=examples[0], height=200)
+user_input = st.text_area(
+    "**Enter your news text:**",
+    placeholder=examples[0],
+    height=200
+)
 
-col1, col2 = st.columns([1, 1])
+# Define 3-column layout: left, spacer, right
+col1, col_spacer, col3 = st.columns([1, 4, 1])
 
+# Left: Show Example
 with col1:
-    if st.button("Show an example"):
+    if st.button("🔁 Show an example"):
         st.session_state['example_index'] = (st.session_state.get('example_index', 0) + 1) % len(examples)
         st.experimental_rerun()
 
-with col2:
-    if st.button("Detect Bias"):
+# Right: Detect Bias
+with col3:
+    if st.button("✅ Detect Bias"):
         if not user_input.strip():
             st.warning("Please enter or upload a news text.")
         else:
             pred, confidence = predict(user_input)
             st.success(f"**Prediction:** {pred}  \n**Confidence:** {confidence}%")
+
 
 # File upload option
 st.markdown("### 📁 Or upload a file:")
