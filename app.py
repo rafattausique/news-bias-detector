@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import joblib
-from textblob import TextBlob
 import re
 
 # Load the model and vectorizer
@@ -40,14 +39,14 @@ st.markdown("Built using Machine Learning and NLP to detect bias in news headlin
 # ---------- Get or initialize index ----------
 example_index = st.session_state.get('example_index', 0)
 
-# ---------- Text Input with current example loaded ----------
+# ---------- Text Input ----------
 user_input = st.text_area(
     "**Enter your news text:**",
     value=examples[example_index],
     height=200
 )
 
-# ---------- Define 3-column layout: left, spacer, right ----------
+# ---------- Define 3-column layout ----------
 col1, col_spacer, col3 = st.columns([1, 4, 1])
 
 # ---------- Left: Show Example ----------
@@ -63,35 +62,32 @@ with col3:
             st.warning("Please enter or upload a news text.")
         else:
             pred, confidence = predict(user_input)
-            # Choose color based on prediction (optional styling)
-color = {
-    'left': '#8B0000',      # dark red
-    'right': '#014421',     # dark green
-    'neutral': '#333333'    # dark gray
-}.get(pred.lower(), '#014421')  # default green
+            color = {
+                'left': '#8B0000',      # dark red
+                'right': '#014421',     # dark green
+                'neutral': '#333333'    # dark gray
+            }.get(pred.lower(), '#014421')  # default green
 
-# Clean result box with fixed width
-st.markdown(
-    f"""
-    <div style='
-        background-color: {color};
-        padding: 1rem;
-        border-radius: 10px;
-        color: white;
-        width: 220px;
-        font-weight: bold;
-        font-family: monospace;
-    '>
-        <div>Prediction: {pred}</div>
-        <div>Confidence: {confidence}%</div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+            # Result box
+            st.markdown(
+                f"""
+                <div style='
+                    background-color: {color};
+                    padding: 1rem;
+                    border-radius: 10px;
+                    color: white;
+                    width: 220px;
+                    font-weight: bold;
+                    font-family: monospace;
+                '>
+                    <div>Prediction: {pred}</div>
+                    <div>Confidence: {confidence}%</div>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
 
-           
-            
-# File upload option
+# ---------- File Upload ----------
 st.markdown("### 📁 Or upload a file:")
 uploaded_file = st.file_uploader("Upload a .txt or .csv file", type=['txt', 'csv'])
 
