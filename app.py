@@ -63,7 +63,8 @@ with col3:
             st.warning("Please enter or upload a news text.")
         else:
             pred, confidence = predict(user_input)
-            st.success(f"**Prediction:** {pred}  \n**Confidence:** {confidence}%")
+            st.success(f"**Prediction:** {pred}  \n\n**Confidence:** {confidence}%")
+
 
 # File upload option
 st.markdown("### 📁 Or upload a file:")
