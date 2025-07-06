@@ -63,27 +63,34 @@ with col3:
             st.warning("Please enter or upload a news text.")
         else:
             pred, confidence = predict(user_input)
-            st.markdown(
+            # Choose color based on prediction (optional styling)
+color = {
+    'left': '#8B0000',      # dark red
+    'right': '#014421',     # dark green
+    'neutral': '#333333'    # dark gray
+}.get(pred.lower(), '#014421')  # default green
+
+# Clean result box with fixed width
+st.markdown(
     f"""
     <div style='
-        background-color: #014421;
+        background-color: {color};
         padding: 1rem;
         border-radius: 10px;
         color: white;
-        width: fit-content;
+        width: 220px;
         font-weight: bold;
-        line-height: 1.6;
+        font-family: monospace;
     '>
-        Prediction: {pred}<br>
-        Confidence: {confidence}%
+        <div>Prediction: {pred}</div>
+        <div>Confidence: {confidence}%</div>
     </div>
     """,
     unsafe_allow_html=True
 )
 
+           
             
-
-
 # File upload option
 st.markdown("### 📁 Or upload a file:")
 uploaded_file = st.file_uploader("Upload a .txt or .csv file", type=['txt', 'csv'])
